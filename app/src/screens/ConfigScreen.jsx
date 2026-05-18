@@ -72,6 +72,7 @@ export default function ConfigScreen({ navigation }) {
           ))}
         </Section>
 
+        {/* En contra reloj no se define cantidad de preguntas, sino tiempo total */}
         {mode !== 'timeAttack' && (
           <Section title="Cantidad de preguntas">
             <View style={styles.row}>

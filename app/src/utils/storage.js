@@ -4,8 +4,8 @@ const HISTORY_KEY = '@calc_history';
 
 export async function saveRoundResult(result) {
   const history = await getHistory();
-  history.unshift(result);
-  const trimmed = history.slice(0, 100);
+  history.unshift(result); // más reciente primero
+  const trimmed = history.slice(0, 100); // límite para no crecer indefinidamente
   await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
 }
 

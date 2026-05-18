@@ -15,6 +15,7 @@ export default function ResultsScreen({ navigation, route }) {
     : 0;
   const accuracy = answers.length ? Math.round((correct / answers.length) * 100) : 0;
 
+  // Se guarda una sola vez al montar la pantalla; el array vacío evita guardados duplicados
   useEffect(() => {
     const result = {
       id: Date.now().toString(),

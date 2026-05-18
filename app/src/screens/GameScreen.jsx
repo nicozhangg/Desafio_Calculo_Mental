@@ -25,11 +25,15 @@ export default function GameScreen({ navigation, route }) {
   const [feedback, setFeedback] = useState(null);
   const [totalTimeLeft, setTotalTimeLeft] = useState(config.totalTimeAttack);
 
+  // Refs que espejean el estado para que los callbacks de setInterval
+  // accedan siempre al valor más reciente sin capturarlo en el closure inicial
   const answersRef = useRef([]);
   const scoreRef = useRef(0);
   const questionStartTime = useRef(Date.now());
+  // handledRef evita procesar dos respuestas para la misma pregunta (ej: tecla + timer simultáneos)
   const handledRef = useRef(false);
   const totalTimerRef = useRef(null);
+  // navigatedRef impide llamar navigation.replace más de una vez
   const navigatedRef = useRef(false);
 
   useEffect(() => { answersRef.current = answers; }, [answers]);
@@ -88,10 +92,12 @@ export default function GameScreen({ navigation, route }) {
       setScore(newScore);
       setFeedback(userAnswerCorrect ? 'correct' : 'wrong');
 
+      // En modo contra reloj termina al primer error; en los demás al agotar las preguntas
       const shouldEnd =
         (mode === 'timeAttack' && !userAnswerCorrect) ||
         (mode !== 'timeAttack' && questionIndex + 1 >= iterations);
 
+      // Retardo para que el usuario vea el feedback antes de pasar a la siguiente pregunta
       setTimeout(() => {
         if (shouldEnd) {
           goToResults(newAnswers, newScore);

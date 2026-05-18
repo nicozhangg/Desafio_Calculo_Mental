@@ -25,6 +25,8 @@ export default function HistoryScreen({ navigation }) {
     setHistory(hist);
   };
 
+  // useFocusEffect recarga los datos cada vez que el usuario vuelve a esta pantalla,
+  // por ejemplo después de terminar una partida nueva
   useFocusEffect(useCallback(() => { load(); }, []));
 
   const handleClear = () => {

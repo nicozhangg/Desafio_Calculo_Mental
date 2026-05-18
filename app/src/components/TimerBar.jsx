@@ -4,6 +4,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 export default function TimerBar({ duration, running, onExpire, resetKey }) {
   const progress = useRef(new Animated.Value(1)).current;
   const anim = useRef(null);
+  // Evita que onExpire se llame más de una vez si el componente re-renderiza al terminar
   const expired = useRef(false);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function TimerBar({ duration, running, onExpire, resetKey }) {
       anim.current = Animated.timing(progress, {
         toValue: 0,
         duration,
-        useNativeDriver: false,
+        useNativeDriver: false, // useNativeDriver no soporta animación de 'width' en layout
       });
       anim.current.start(({ finished }) => {
         if (finished && !expired.current) {
@@ -23,6 +24,7 @@ export default function TimerBar({ duration, running, onExpire, resetKey }) {
       });
     }
     return () => anim.current?.stop();
+  // resetKey cambia con cada pregunta para reiniciar la barra sin desmontar el componente
   }, [resetKey, running]);
 
   const backgroundColor = progress.interpolate({

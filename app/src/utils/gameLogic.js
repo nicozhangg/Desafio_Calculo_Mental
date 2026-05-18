@@ -17,15 +17,17 @@ function generateBasicOperation(difficulty) {
       break;
     case '-':
       a = randomInt(1, config.maxNumber);
-      b = randomInt(1, a);
+      b = randomInt(1, a); // b <= a para que el resultado nunca sea negativo
       answer = a - b;
       break;
     case '*':
+      // Se limita a 12 para evitar productos demasiado grandes en niveles bajos
       a = randomInt(1, Math.min(12, config.maxNumber));
       b = randomInt(1, Math.min(12, config.maxNumber));
       answer = a * b;
       break;
     case '/':
+      // Se genera el cociente primero y luego el dividendo para garantizar división exacta
       b = randomInt(1, Math.min(12, config.maxNumber));
       answer = randomInt(1, Math.min(12, config.maxNumber));
       a = b * answer;
@@ -65,6 +67,7 @@ export function generateOperation(difficulty, mode) {
   const { question, answer } = generateBasicOperation(difficulty);
 
   if (mode === 'trueFalse') {
+    // 50% de probabilidad de mostrar un resultado incorrecto (diferencia de 1 a 3)
     const showWrong = Math.random() < 0.5;
     const displayAnswer = showWrong
       ? answer + (Math.random() < 0.5 ? 1 : -1) * randomInt(1, 3)
